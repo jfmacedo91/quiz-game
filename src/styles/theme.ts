@@ -7,9 +7,15 @@ export const theme = createTheme({
     },
     secondary: {
       main: '#308FBF'
+    },
+    background: {
+      default: '#16161A'
+    },
+    text: {
+      primary: '#F9F7FF'
     }
   },
   typography: {
-    fontFamily: 'Signika'
+    fontFamily: 'Rubik'
   }
 })
