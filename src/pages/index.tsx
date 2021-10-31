@@ -1,10 +1,29 @@
 import Head from 'next/head'
 import { Box } from '@material-ui/system'
-import { Button, TextField, Tooltip, Typography } from '@material-ui/core'
-import { useState } from 'react'
+import { Button, TextField, Typography } from '@material-ui/core'
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+
+const validationSchema = yup.object().shape({
+  amount: yup.number()
+    .typeError('You must specify a number')
+    .required('Inform the number of questions')
+    .min(1, 'You need to answer at least 1 question')
+    .max(50, 'You can answer a maximum of 50')
+})
+
+function submit(values: any) {
+  console.log(values)
+}
 
 export default function Home() {
-  const [amount, setAmount] = useState(0)
+  const formik = useFormik({
+    onSubmit: submit,
+    validationSchema,
+    initialValues: {
+      amount: ''
+    }
+  })
 
   return (
     <>
@@ -24,9 +43,9 @@ export default function Home() {
           width='100%'
           maxWidth='700px'
           bgcolor='#FFF1'
-          borderRadius='20px'
           textAlign='center'
-          padding='20px'
+          paddingX={ 2 }
+          paddingY={ 4 }
         >
           <Typography
             variant='h3'
@@ -43,20 +62,19 @@ export default function Home() {
           >
             How many questions would you like to answer?
           </Typography>
-          <form>
-            <Tooltip title='You can answer a maximum of 50 questions' arrow>
-              <TextField
-                variant='standard'
-                type='number'
-                color='secondary'
-                sx={ {
-                  width: '60px',
-                  marginRight: '16px',
-                  backgroundColor: '#FFF1'
-                } }
-                onChange={ (e) => { setAmount(Number(e.target.value)) } }
-              />
-            </Tooltip>
+          <form onSubmit={ formik.handleSubmit }>
+            <TextField
+              id='amount'
+              variant='standard'
+              color='secondary'
+              onChange={ formik.handleChange }
+              value={ formik.values.amount }
+              helperText={ formik.errors.amount }
+              error={ !!formik.errors.amount }
+              sx={ {
+                marginRight: '16px'
+              } }
+            />
             <Button
               type='submit'
               variant='contained'
