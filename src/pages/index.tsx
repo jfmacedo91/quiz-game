@@ -1,8 +1,10 @@
+import * as yup from 'yup'
 import Head from 'next/head'
 import { Box } from '@material-ui/system'
 import { Button, TextField, Typography } from '@material-ui/core'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
+import { useContext } from 'react'
+import { QuestionsContext } from '../contexts/QuestionsContext'
 
 const validationSchema = yup.object().shape({
   amount: yup.number()
@@ -12,11 +14,9 @@ const validationSchema = yup.object().shape({
     .max(50, 'You can answer a maximum of 50')
 })
 
-function submit(values: any) {
-  console.log(values)
-}
-
 export default function Home() {
+  const { submit } = useContext(QuestionsContext)
+
   const formik = useFormik({
     onSubmit: submit,
     validationSchema,
