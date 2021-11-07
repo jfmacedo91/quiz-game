@@ -81,7 +81,7 @@ export default function Home() {
               color='secondary'
               size='small'
             >
-              Ok
+              send
             </Button>
           </form>
         </Box>
