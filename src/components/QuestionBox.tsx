@@ -1,8 +1,18 @@
-import { createElement } from "react";
-import { Box } from "@material-ui/system";
-import { Button } from "@material-ui/core";
+import { createElement } from "react"
+import { Box } from "@material-ui/system"
+import { Button } from "@material-ui/core"
 
-export function QuestionBox({ question }) {
+type QuestionProps = {
+  key: string
+  answers: string[]
+  category: string
+  correct_answer: string
+  question: string
+}
+
+export function QuestionBox({ answers, category, correct_answer, question }: QuestionProps) {
+  console.log(question);
+  
   function renderQuestion(HTML: string) {
     return createElement("h2", { dangerouslySetInnerHTML: { __html: HTML } })
   }
@@ -22,7 +32,7 @@ export function QuestionBox({ question }) {
       borderRadius="4px"
       boxShadow="1px 1px 10px -2px #00000066"
     >
-      { renderQuestion(question.question) }
+      { renderQuestion(question) }
       <Box
         sx={ {
           display: "grid",
@@ -30,7 +40,7 @@ export function QuestionBox({ question }) {
           gap: "10px"
         } }
       >
-        { question.answers.map(answer => (
+        { answers.map(answer => (
           <Button key={ answer }>{ renderAnswer(answer) }</Button>
         )) }
       </Box>
