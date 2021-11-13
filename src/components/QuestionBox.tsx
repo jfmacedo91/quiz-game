@@ -1,20 +1,27 @@
 import { createElement } from "react"
-import { Box } from "@material-ui/system"
-import { Button } from "@material-ui/core"
+import { Button, Chip, Stack, Typography } from "@material-ui/core"
 
 type QuestionProps = {
-  key: string
   answers: string[]
   category: string
   correct_answer: string
   question: string
+  totalQuestions: number
+  questionIndex: number
+  onSubmit: () => void
 }
 
-export function QuestionBox({ answers, category, correct_answer, question }: QuestionProps) {
-  console.log(question);
-  
+export function QuestionBox({
+  answers,
+  category,
+  correct_answer,
+  question,
+  questionIndex,
+  totalQuestions,
+  onSubmit
+}: QuestionProps) {
   function renderQuestion(HTML: string) {
-    return createElement("h2", { dangerouslySetInnerHTML: { __html: HTML } })
+    return createElement("span", { dangerouslySetInnerHTML: { __html: HTML } })
   }
 
   function renderAnswer(HTML: string) {
@@ -22,28 +29,37 @@ export function QuestionBox({ answers, category, correct_answer, question }: Que
   }
 
   return (
-    <Box
+    <Stack
       width="100%"
-      maxWidth="700px"
+      maxWidth="500px"
       bgcolor="#FFFFFF03"
       textAlign="center"
-      paddingX={ 2 }
-      paddingY={ 4 }
+      padding={ 4 }
+      border="1px solid #FFFFFF09"
       borderRadius="4px"
-      boxShadow="1px 1px 10px -2px #00000066"
+      spacing={ 4 }
     >
-      { renderQuestion(question) }
-      <Box
-        sx={ {
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "10px"
-        } }
+      <Stack
+        spacing={ 2 }
+        alignItems="center"
+        justifyContent="center"
       >
-        { answers.map(answer => (
-          <Button key={ answer }>{ renderAnswer(answer) }</Button>
+        <Typography variant="h6" color="primary">
+          { `Question ${ questionIndex + 1 } of ${ totalQuestions }` }
+        </Typography>
+        <Chip label={ category } color="warning" size="small"/>
+      </Stack>
+      <Typography variant="h5">
+        { renderQuestion(question) }
+      </Typography>
+      <Stack spacing={ 1 }>
+        { answers.map((answer, index) => (
+          <Button key={ `answer__${ index }` } variant="outlined" color="secondary">
+            { renderAnswer(answer) }
+          </Button>
         )) }
-      </Box>
-    </Box>
+      </Stack>
+      <Button variant="contained" onClick={ onSubmit }>Confirm</Button>
+    </Stack>
   )
 }

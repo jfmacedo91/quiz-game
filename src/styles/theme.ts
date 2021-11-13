@@ -8,6 +8,15 @@ export const theme = createTheme({
     secondary: {
       main: '#308FBF'
     },
+    warning: {
+      main: '#FFED65'
+    },
+    success: {
+      main: '#30BF78'
+    },
+    error: {
+      main: '#FF4365'
+    },
     background: {
       default: '#16161A'
     },

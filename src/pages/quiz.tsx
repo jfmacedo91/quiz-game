@@ -1,4 +1,5 @@
 import { Box } from "@material-ui/system"
+import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 
 import { QuestionBox } from "../components/QuestionBox"
@@ -7,10 +8,10 @@ import { QuestionsContext } from "../contexts/QuestionsContext"
 
 export default function Quiz() {
   const { questions } = useContext(QuestionsContext)
-  const totalQuestion = questions.length
+  const totalQuestions = questions.length
   const [questionIndex, setQuestionIndex] = useState(0)
-  const [screenStates, setScreenStates] = useState("QUIZ")
   const [result, setResult] = useState([])
+  const router = useRouter()
   
   const formattedQuestions = questions.map(question => {
     return {
@@ -22,6 +23,15 @@ export default function Quiz() {
   })
   
   const question = formattedQuestions[questionIndex]
+
+  function handleQuizSubmit() {
+    const nextQuestion = questionIndex + 1
+    if(nextQuestion < totalQuestions) {
+      setQuestionIndex(nextQuestion)
+    } else {
+      router.push("/result")
+    }
+  }
 
   return (
     <Box
@@ -36,11 +46,13 @@ export default function Quiz() {
       } }
     >
       <QuestionBox
-        key={`question__${ questionIndex }`}
         answers={ question.answers }
         category={ question.category }
         correct_answer={ question.correct_answer }
         question={ question.question }
+        questionIndex={ questionIndex }
+        totalQuestions={ totalQuestions }
+        onSubmit={ handleQuizSubmit }
       />
     </Box>
   )
