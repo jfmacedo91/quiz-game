@@ -1,5 +1,7 @@
-import { createElement } from "react"
-import { Button, Chip, Stack, Typography } from "@material-ui/core"
+import { ChangeEvent, createElement, useState } from "react"
+import { Button, Chip, FormControlLabel, FormHelperText, Radio, RadioGroup, Stack, Typography } from "@material-ui/core"
+
+import { theme } from "../styles/theme"
 
 type QuestionProps = {
   answers: string[]
@@ -20,6 +22,9 @@ export function QuestionBox({
   totalQuestions,
   onSubmit
 }: QuestionProps) {
+  const [value, setValue] = useState('');
+  const [helperText, setHelperText] = useState('Choose wisely');
+
   function renderQuestion(HTML: string) {
     return createElement("span", { dangerouslySetInnerHTML: { __html: HTML } })
   }
@@ -28,10 +33,15 @@ export function QuestionBox({
     return createElement("span", { dangerouslySetInnerHTML: { __html: HTML } })
   }
 
+  function handleRadioChange(event: ChangeEvent<HTMLInputElement>) {
+    setValue((event.target as HTMLInputElement).value);
+    setHelperText('');
+  }
+
   return (
     <Stack
       width="100%"
-      maxWidth="500px"
+      maxWidth="700px"
       bgcolor="#FFFFFF03"
       textAlign="center"
       padding={ 4 }
@@ -52,13 +62,22 @@ export function QuestionBox({
       <Typography variant="h5">
         { renderQuestion(question) }
       </Typography>
-      <Stack spacing={ 1 }>
+      <RadioGroup
+        aria-label="quiz"
+        name="quiz"
+        value={ value }
+        onChange={ handleRadioChange }
+      >
         { answers.map((answer, index) => (
-          <Button key={ `answer__${ index }` } variant="outlined" color="secondary">
-            { renderAnswer(answer) }
-          </Button>
+          <FormControlLabel
+            key={ `answer${ index }` }
+            value={ answer }
+            control={ <Radio color="secondary" sx={ { color: theme.palette.secondary.main } } /> }
+            label={ renderAnswer(answer) }
+          />
         )) }
-      </Stack>
+      </RadioGroup>
+      <FormHelperText>{ helperText }</FormHelperText>
       <Button variant="contained" onClick={ onSubmit }>Confirm</Button>
     </Stack>
   )

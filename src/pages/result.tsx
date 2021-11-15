@@ -1,13 +1,8 @@
 import Head from "next/head"
-import Link from "next/link"
-import { useContext } from "react"
 import { Box } from "@material-ui/system"
 import { Button, Stack, Typography } from "@material-ui/core"
 
-import { QuestionsContext } from "../contexts/QuestionsContext"
-
-export default function Confirm() {
-  const { amount } = useContext(QuestionsContext)
+export default function Result() {
   return (
     <>
       <Head>
@@ -33,20 +28,8 @@ export default function Confirm() {
           spacing={ 4 }
         >
           <Typography variant="h4">
-            Would you like to answer { amount } questions?
+            Resultado
           </Typography>
-          <Stack direction='row' spacing={ 2 } justifyContent='center'>
-            <Link href="/quiz">
-              <Button variant="contained" color="success">
-                Start
-              </Button>
-            </Link>
-            <Link href="/">
-              <Button variant="contained" color="error">
-                Cancel
-              </Button>
-            </Link>
-          </Stack>
         </Stack>
       </Box>
     </>

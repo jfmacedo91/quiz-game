@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import Head from 'next/head'
 import { Box } from '@material-ui/system'
-import { Button, TextField, Typography } from '@material-ui/core'
+import { Button, Stack, TextField, Typography } from '@material-ui/core'
 import { useFormik } from 'formik'
 import { useContext } from 'react'
 import { QuestionsContext } from '../contexts/QuestionsContext'
@@ -39,52 +39,39 @@ export default function Home() {
           justifyContent: 'center'
         } }
       >
-        <Box
-          width='100%'
-          maxWidth='700px'
-          bgcolor='#FFF1'
-          textAlign='center'
-          paddingX={ 2 }
-          paddingY={ 4 }
+        <Stack
+          width="100%"
+          maxWidth="700px"
+          bgcolor="#FFFFFF03"
+          textAlign="center"
+          padding={ 4 }
+          border="1px solid #FFFFFF09"
+          borderRadius="4px"
+          spacing={ 4 }
         >
-          <Typography
-            variant='h3'
-            mb={ 2 }
-            fontWeight='500'
-            color='primary'
-          >
+          <Typography variant='h4' color='primary'>
             Quiz game
           </Typography>
-          <Typography
-            variant='body1'
-            mb={ 2 }
-            fontWeight='400'
-          >
+          <Typography variant='body1'>
             How many questions would you like to answer?
           </Typography>
           <form onSubmit={ formik.handleSubmit }>
-            <TextField
-              id='amount'
-              variant='standard'
-              color='secondary'
-              onChange={ formik.handleChange }
-              value={ formik.values.amount }
-              helperText={ formik.errors.amount }
-              error={ !!formik.errors.amount }
-              sx={ {
-                marginRight: '16px'
-              } }
-            />
-            <Button
-              type='submit'
-              variant='contained'
-              color='secondary'
-              size='small'
-            >
-              send
-            </Button>
+            <Stack direction='row' spacing={ 2 } justifyContent='center'>
+              <TextField
+                id='amount'
+                variant='standard'
+                color='secondary'
+                onChange={ formik.handleChange }
+                value={ formik.values.amount }
+                helperText={ formik.errors.amount }
+                error={ !!formik.errors.amount }
+              />
+              <Button type='submit' variant='contained' color='secondary'>
+                send
+              </Button>
+            </Stack>
           </form>
-        </Box>
+        </Stack>
       </Box>
     </>
   )
