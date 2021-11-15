@@ -1,6 +1,7 @@
+import Head from "next/head"
 import { Box } from "@material-ui/system"
 import { useRouter } from "next/router"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { QuestionBox } from "../components/QuestionBox"
 
@@ -12,6 +13,11 @@ export default function Quiz() {
   const [questionIndex, setQuestionIndex] = useState(0)
   const [result, setResult] = useState([])
   const router = useRouter()
+
+  useEffect(() => {
+    if(questions.length === 0)
+      router.push("/")
+  }, [])
   
   const formattedQuestions = questions.map(question => {
     return {
@@ -34,26 +40,31 @@ export default function Quiz() {
   }
 
   return (
-    <Box
-      height="100vh"
-      padding={ 2 }
-      sx={ {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px"
-      } }
-    >
-      <QuestionBox
-        answers={ question.answers }
-        category={ question.category }
-        correct_answer={ question.correct_answer }
-        question={ question.question }
-        questionIndex={ questionIndex }
-        totalQuestions={ totalQuestions }
-        onSubmit={ handleQuizSubmit }
-      />
-    </Box>
+    <>
+      <Head>
+        <title>Quiz game - questions</title>
+      </Head>
+      <Box
+        height="100vh"
+        padding={ 2 }
+        sx={ {
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "10px"
+        } }
+      >
+        <QuestionBox
+          answers={ question?.answers }
+          category={ question?.category }
+          correct_answer={ question?.correct_answer }
+          question={ question?.question }
+          questionIndex={ questionIndex }
+          totalQuestions={ totalQuestions }
+          onSubmit={ handleQuizSubmit }
+        />
+      </Box>
+    </>
   )
 }

@@ -68,7 +68,7 @@ export function QuestionBox({
         value={ value }
         onChange={ handleRadioChange }
       >
-        { answers.map((answer, index) => (
+        { answers?.map((answer, index) => (
           <FormControlLabel
             key={ `answer${ index }` }
             value={ answer }

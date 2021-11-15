@@ -6,7 +6,7 @@ export default function Result() {
   return (
     <>
       <Head>
-        <title>Quiz game - Comfirm</title>
+        <title>Quiz game - Result</title>
       </Head>
       <Box
         height="100vh"
@@ -27,8 +27,8 @@ export default function Result() {
           borderRadius="4px"
           spacing={ 4 }
         >
-          <Typography variant="h4">
-            Resultado
+          <Typography variant='h4' color='primary'>
+            Result
           </Typography>
         </Stack>
       </Box>
