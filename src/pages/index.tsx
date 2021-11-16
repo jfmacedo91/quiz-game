@@ -15,10 +15,10 @@ const validationSchema = yup.object().shape({
 })
 
 export default function Home() {
-  const { submit } = useContext(QuestionsContext)
+  const { handleIndexSubmit } = useContext(QuestionsContext)
 
   const formik = useFormik({
-    onSubmit: submit,
+    onSubmit: handleIndexSubmit,
     validationSchema,
     initialValues: {
       amount: ''

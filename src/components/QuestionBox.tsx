@@ -1,5 +1,7 @@
-import { ChangeEvent, createElement, useState } from "react"
+import { ChangeEvent, createElement, useContext, useState } from "react"
 import { Button, Chip, FormControlLabel, FormHelperText, Radio, RadioGroup, Stack, Typography } from "@material-ui/core"
+
+import { QuestionsContext } from "../contexts/QuestionsContext"
 
 import { theme } from "../styles/theme"
 
@@ -10,7 +12,6 @@ type QuestionProps = {
   question: string
   totalQuestions: number
   questionIndex: number
-  onSubmit: () => void
 }
 
 export function QuestionBox({
@@ -19,9 +20,9 @@ export function QuestionBox({
   correct_answer,
   question,
   questionIndex,
-  totalQuestions,
-  onSubmit
+  totalQuestions
 }: QuestionProps) {
+  const { handleQuizSubmit } = useContext(QuestionsContext)
   const [value, setValue] = useState('');
   const [helperText, setHelperText] = useState('Choose wisely');
 
@@ -78,7 +79,7 @@ export function QuestionBox({
         )) }
       </RadioGroup>
       <FormHelperText>{ helperText }</FormHelperText>
-      <Button variant="contained" onClick={ onSubmit }>Confirm</Button>
+      <Button variant="contained" onClick={ handleQuizSubmit }>Confirm</Button>
     </Stack>
   )
 }
