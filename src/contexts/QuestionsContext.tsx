@@ -64,6 +64,10 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
         { correct_answer, isCorrect, question, selectedAnswer }
       ])
     } else {
+      setResults([
+        ...results,
+        { correct_answer, isCorrect, question, selectedAnswer }
+      ])
       router.push("/result")
     }
   }
