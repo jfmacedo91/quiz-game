@@ -2,6 +2,7 @@ import { ChangeEvent, createElement, FormEvent, useContext, useState } from "rea
 import { Button, Chip, FormControl, FormControlLabel, FormHelperText, Radio, RadioGroup, Stack, Typography } from "@material-ui/core"
 
 import { QuestionsContext } from "../contexts/QuestionsContext"
+import { Render } from "../utils/renderHTML"
 
 import { theme } from "../styles/theme"
 
@@ -28,14 +29,6 @@ export function QuestionBox({
   const [selectedAnswer, setSelectedAnswer] = useState("")
   const hasAnswerSelected = selectedAnswer !== ""
 
-  function renderQuestion(HTML: string) {
-    return createElement("span", { dangerouslySetInnerHTML: { __html: HTML } })
-  }
-
-  function renderAnswer(HTML: string) {
-    return createElement("span", { dangerouslySetInnerHTML: { __html: HTML } })
-  }
-
   function handleRadioChange(event: ChangeEvent<HTMLInputElement>) {
     setSelectedAnswer((event.target as HTMLInputElement).value);
     setHelperText(" ");
@@ -46,16 +39,31 @@ export function QuestionBox({
     if(selectedAnswer === correct_answer) {
       setHelperText("You got it!")
       setError(false)
+      setTimeout(() => {
+        handleQuizSubmit({
+          question,
+          selectedAnswer,
+          isCorrect: true
+        })
+        setError(false)
+        setHelperText(" ")
+        setSelectedAnswer("")
+      }, 2000)
     } else {
       setHelperText("Sorry, wrong answer!")
       setError(true)
+      setTimeout(() => {
+        handleQuizSubmit({
+          correct_answer,
+          question,
+          selectedAnswer,
+          isCorrect: false
+        })
+        setError(false)
+        setHelperText(" ")
+        setSelectedAnswer("")
+      }, 2000)
     }
-    setTimeout(() => {
-      handleQuizSubmit()
-      setError(false)
-      setHelperText(" ")
-      setSelectedAnswer("")
-    }, 2000)
   }
 
   return (
@@ -80,7 +88,7 @@ export function QuestionBox({
         <Chip label={ category } color="warning" size="small"/>
       </Stack>
       <Typography variant="h5">
-        { renderQuestion(question) }
+        { Render.question(question) }
       </Typography>
       <form onSubmit={ handleAnswerSubmit }>
         <FormControl component="fieldset" error={ error } sx={ { width: "100%" } }>
@@ -95,7 +103,7 @@ export function QuestionBox({
                 key={ `answer${ index }` }
                 value={ answer }
                 control={ <Radio color="secondary" sx={ { color: theme.palette.secondary.main } } /> }
-                label={ renderAnswer(answer) }
+                label={ Render.answer(answer) }
               />
             )) }
           </RadioGroup>

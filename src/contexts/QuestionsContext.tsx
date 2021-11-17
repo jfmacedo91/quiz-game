@@ -14,12 +14,20 @@ type Question = {
   question: string
 }
 
+type Result = {
+  correct_answer?: string
+  isCorrect: boolean
+  question: string
+  selectedAnswer: string
+}
+
 type QuestionsConstextData = {
   amount: number
   handleIndexSubmit: ({ amount }) => void
-  handleQuizSubmit: () => void
+  handleQuizSubmit: ({ correct_answer, isCorrect, question, selectedAnswer }: Result) => void
   question: Question
   questionIndex: number
+  results: Result[]
   totalQuestions: number
 }
 
@@ -29,7 +37,7 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
   const router = useRouter()
   const [amount, setAmount] = useState(0)
   const [questions, setQuestions] = useState([])
-  const [result, setResult] = useState([])
+  const [results, setResults] = useState([])
   const [questionIndex, setQuestionIndex] = useState(0)
   const totalQuestions = questions.length
 
@@ -42,10 +50,19 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
     router.push("/confirm")
   }
 
-  function handleQuizSubmit() {
+  function handleQuizSubmit({
+    correct_answer,
+    isCorrect,
+    question,
+    selectedAnswer
+  }) {
     const nextQuestion = questionIndex + 1
     if(nextQuestion < totalQuestions) {
       setQuestionIndex(nextQuestion)
+      setResults([
+        ...results,
+        { correct_answer, isCorrect, question, selectedAnswer }
+      ])
     } else {
       router.push("/result")
     }
@@ -69,6 +86,7 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
       handleQuizSubmit,
       question,
       questionIndex,
+      results,
       totalQuestions
     } }>
       { children }
