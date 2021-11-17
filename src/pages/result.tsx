@@ -4,10 +4,14 @@ import { Stack, Typography } from "@material-ui/core"
 import { useContext } from "react"
 
 import { QuestionsContext } from "../contexts/QuestionsContext"
-import { Render } from "../utils/renderHTML"
+import { renderHTML } from "../utils/renderHTML"
 
 export default function Result() {
   const { results } = useContext(QuestionsContext)
+  const totalHits = results.reduce((sum, result) => {
+    if (result.isCorrect) return sum + 1
+    return sum;
+  }, 0)
 
   return (
     <>
@@ -19,7 +23,7 @@ export default function Result() {
         padding={ 2 }
         sx={ {
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: "center"
         } }
       >
@@ -33,23 +37,26 @@ export default function Result() {
           borderRadius="4px"
           spacing={ 4 }
         >
-          <Typography variant='h4' color='primary'>
+          <Typography variant="h4" color="primary">
             Result
+          </Typography>
+          <Typography variant="body1" color="secondary">
+            You got { totalHits } of { results.length } question{ results.length > 1 && "s" } right
           </Typography>
           { results.map((result, index) => {
             if(result.isCorrect) {
               return (
                 <Stack width="100%" textAlign="left" spacing={ 1 }>
-                  <Typography>{ index + 1 }: { Render.question(result.question) }</Typography>
-                  <Typography color="primary">{ Render.answer(result.selectedAnswer) }</Typography>
+                  <Typography variant="body1">{ index + 1 }: { renderHTML(result.question) }</Typography>
+                  <Typography variant="body2" color="primary">{ renderHTML(result.selectedAnswer) }</Typography>
                 </Stack>
               )
             } else {
               return (
                 <Stack width="100%" textAlign="left" spacing={ 1 }>
-                <Typography>{ index + 1 }: { Render.question(result.question) }</Typography>
-                  <Typography color="error">{ Render.answer(result.selectedAnswer) }</Typography>
-                  <Typography color="primary">{ Render.answer(result.correct_answer) }</Typography>
+                  <Typography variant="body1">{ index + 1 }: { renderHTML(result.question) }</Typography>
+                  <Typography variant="body2" color="error">{ renderHTML(result.selectedAnswer) }</Typography>
+                  <Typography variant="body2" color="primary">{ renderHTML(result.correct_answer) }</Typography>
                 </Stack>
               )
             }

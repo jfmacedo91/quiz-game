@@ -2,7 +2,7 @@ import { ChangeEvent, createElement, FormEvent, useContext, useState } from "rea
 import { Button, Chip, FormControl, FormControlLabel, FormHelperText, Radio, RadioGroup, Stack, Typography } from "@material-ui/core"
 
 import { QuestionsContext } from "../contexts/QuestionsContext"
-import { Render } from "../utils/renderHTML"
+import { renderHTML } from "../utils/renderHTML"
 
 import { theme } from "../styles/theme"
 
@@ -88,7 +88,7 @@ export function QuestionBox({
         <Chip label={ category } color="warning" size="small"/>
       </Stack>
       <Typography variant="h5">
-        { Render.question(question) }
+        { renderHTML(question) }
       </Typography>
       <form onSubmit={ handleAnswerSubmit }>
         <FormControl component="fieldset" error={ error } sx={ { width: "100%" } }>
@@ -103,7 +103,7 @@ export function QuestionBox({
                 key={ `answer${ index }` }
                 value={ answer }
                 control={ <Radio color="secondary" sx={ { color: theme.palette.secondary.main } } /> }
-                label={ Render.answer(answer) }
+                label={ renderHTML(answer) }
               />
             )) }
           </RadioGroup>
