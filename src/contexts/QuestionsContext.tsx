@@ -46,6 +46,10 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
   }, [amount])
 
   function handleIndexSubmit({ amount }) {
+    setAmount(0)
+    setQuestions([])
+    setResults([])
+    setQuestionIndex(0)
     setAmount(amount)
     router.push("/confirm")
   }

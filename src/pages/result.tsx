@@ -1,6 +1,7 @@
 import Head from "next/head"
+import Link from "next/link"
 import { Box } from "@material-ui/system"
-import { Stack, Typography } from "@material-ui/core"
+import { Button, Stack, Typography } from "@material-ui/core"
 import { useContext } from "react"
 
 import { QuestionsContext } from "../contexts/QuestionsContext"
@@ -46,14 +47,14 @@ export default function Result() {
           { results.map((result, index) => {
             if(result.isCorrect) {
               return (
-                <Stack width="100%" textAlign="left" spacing={ 1 }>
+                <Stack key={ `result_${index}` } width="100%" textAlign="left" spacing={ 1 }>
                   <Typography variant="body1">{ index + 1 }: { renderHTML(result.question) }</Typography>
                   <Typography variant="body2" color="primary">{ renderHTML(result.selectedAnswer) }</Typography>
                 </Stack>
               )
             } else {
               return (
-                <Stack width="100%" textAlign="left" spacing={ 1 }>
+                <Stack key={ `result_${index}` } width="100%" textAlign="left" spacing={ 1 }>
                   <Typography variant="body1">{ index + 1 }: { renderHTML(result.question) }</Typography>
                   <Typography variant="body2" color="error">{ renderHTML(result.selectedAnswer) }</Typography>
                   <Typography variant="body2" color="primary">{ renderHTML(result.correct_answer) }</Typography>
@@ -61,6 +62,9 @@ export default function Result() {
               )
             }
           }) }
+          <Link href="/">
+            <Button>Pagina Inicial</Button>
+          </Link>
         </Stack>
       </Box>
     </>
