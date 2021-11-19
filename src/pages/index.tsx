@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Box } from '@material-ui/system'
 import { Button, Stack, TextField, Typography } from '@material-ui/core'
 import { useFormik } from 'formik'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { QuestionsContext } from '../contexts/QuestionsContext'
 
 const validationSchema = yup.object().shape({
@@ -15,7 +15,7 @@ const validationSchema = yup.object().shape({
 })
 
 export default function Home() {
-  const { handleIndexSubmit } = useContext(QuestionsContext)
+  const { clearStates , handleIndexSubmit, getOldResults, oldResults } = useContext(QuestionsContext)
 
   const formik = useFormik({
     onSubmit: handleIndexSubmit,
@@ -24,6 +24,11 @@ export default function Home() {
       amount: ''
     }
   })
+
+  useEffect(() => {
+    getOldResults()
+    clearStates()
+  }, [])
 
   return (
     <>

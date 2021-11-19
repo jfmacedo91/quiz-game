@@ -22,12 +22,17 @@ type Result = {
 }
 
 type QuestionsConstextData = {
+  addOldResults: (results: Result[]) => void
   amount: number
+  clearStates: () => void
+  getOldResults: () => void
   handleIndexSubmit: ({ amount }) => void
   handleQuizSubmit: ({ correct_answer, isCorrect, question, selectedAnswer }: Result) => void
+  localStorageSave: () => void
   question: Question
   questionIndex: number
   results: Result[]
+  oldResults: string[]
   totalQuestions: number
 }
 
@@ -37,19 +42,23 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
   const router = useRouter()
   const [amount, setAmount] = useState(0)
   const [questions, setQuestions] = useState([])
-  const [results, setResults] = useState([])
   const [questionIndex, setQuestionIndex] = useState(0)
+  const [oldResults, setOldResults] = useState([])
+  const [results, setResults] = useState([])
   const totalQuestions = questions.length
 
   useEffect(() => {
     api.get(`api.php?amount=${ amount }`).then(response => setQuestions(response.data.results))
   }, [amount])
 
-  function handleIndexSubmit({ amount }) {
+  function clearStates() {
     setAmount(0)
     setQuestions([])
     setResults([])
     setQuestionIndex(0)
+  }
+
+  function handleIndexSubmit({ amount }) {
     setAmount(amount)
     router.push("/confirm")
   }
@@ -62,11 +71,11 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
   }) {
     const nextQuestion = questionIndex + 1
     if(nextQuestion < totalQuestions) {
-      setQuestionIndex(nextQuestion)
       setResults([
         ...results,
         { correct_answer, isCorrect, question, selectedAnswer }
       ])
+      setQuestionIndex(nextQuestion)
     } else {
       setResults([
         ...results,
@@ -74,6 +83,33 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
       ])
       router.push("/result")
     }
+  }
+
+  function getOldResults() {
+    const response = localStorage.old_results
+    if(response === undefined) {
+      return
+    } else {
+      const results = JSON.parse(response)
+      setOldResults(results)
+    }
+  }
+
+  function addOldResults(results: Result[]) {
+    if(results.length === 0) {
+      getOldResults()
+      return
+    } else {
+      setOldResults([
+        ...oldResults,
+        { date: new Date(), results }
+      ])
+    }
+  }
+
+  function localStorageSave() {
+    console.log(oldResults)
+    localStorage.setItem('old_results', JSON.stringify(oldResults))
   }
   
   const formattedQuestions = questions.map(question => {
@@ -89,12 +125,17 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
 
   return (
     <QuestionsContext.Provider value={ {
+      addOldResults,
       amount,
+      clearStates,
+      getOldResults,
       handleIndexSubmit,
       handleQuizSubmit,
+      localStorageSave,
       question,
       questionIndex,
       results,
+      oldResults,
       totalQuestions
     } }>
       { children }
