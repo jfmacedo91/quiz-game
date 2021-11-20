@@ -91,7 +91,13 @@ export function QuestionBox({
         { renderHTML(question) }
       </Typography>
       <form onSubmit={ handleAnswerSubmit }>
-        <FormControl component="fieldset" error={ error } sx={ { width: "100%" } }>
+        <FormControl
+          component="fieldset"
+          error={ error }
+          sx={ {
+            alignItems: "center"
+          } }
+        >
           <RadioGroup
             aria-label="quiz"
             name="quiz"
@@ -117,7 +123,9 @@ export function QuestionBox({
             variant="contained"
             type="submit"
             disabled={ !hasAnswerSelected }
-            sx={ { mt: 2 } }
+            sx={ {
+              mt:2,
+            } }
           >
             Confirm
           </Button>

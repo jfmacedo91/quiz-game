@@ -67,13 +67,13 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
       return
     } else {
       setOldResults([
-        ...oldResults,
         { title: format(
           new Date(),
           "'Result of ' PP' at 'pp", {
             locale: enUS
           }
-        ), results }
+          ), results },
+          ...oldResults
       ])
     }
   }
