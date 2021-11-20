@@ -2,25 +2,17 @@ import Head from "next/head"
 import Link from "next/link"
 import { Box } from "@material-ui/system"
 import { Button, Stack, Typography } from "@material-ui/core"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 
 import { QuestionsContext } from "../contexts/QuestionsContext"
 import { renderHTML } from "../utils/renderHTML"
 
-export default function Result() {
-  const { addOldResults, localStorageSave, results } = useContext(QuestionsContext)
-  const totalHits = results.reduce((sum, result) => {
+export default function pastResult() {
+  const { pastResult } = useContext(QuestionsContext)
+  const totalHits = pastResult?.results.reduce((sum, result) => {
     if (result.isCorrect) return sum + 1
     return sum;
   }, 0)
-
-  useEffect(() => {
-    addOldResults(results)
-  }, [])
-
-  useEffect(() => {
-    localStorageSave()
-  })
 
   return (
     <>
@@ -50,9 +42,9 @@ export default function Result() {
             Result
           </Typography>
           <Typography variant="body1" color="secondary">
-            You got { totalHits } of { results.length } question{ results.length > 1 && "s" } right
+            You got { totalHits } of { pastResult?.results.length } question{ pastResult?.results.length > 1 && "s" } right
           </Typography>
-          { results.map((result, index) => {
+          { pastResult?.results.map((result, index) => {
             if(result.isCorrect) {
               return (
                 <Stack key={ `result_${index}` } width="100%" textAlign="left" spacing={ 1 }>

@@ -1,3 +1,5 @@
+import { format } from "date-fns"
+import { enUS } from "date-fns/locale"
 import { useRouter } from "next/router"
 import { createContext, ReactNode, useEffect, useState } from "react"
 
@@ -21,18 +23,25 @@ type Result = {
   selectedAnswer: string
 }
 
+type OldResult = {
+  title: string
+  results: Result[]
+}
+
 type QuestionsConstextData = {
   addOldResults: (results: Result[]) => void
   amount: number
+  changePastResult: (oldResult: OldResult) => void
   clearStates: () => void
   getOldResults: () => void
   handleIndexSubmit: ({ amount }) => void
   handleQuizSubmit: ({ correct_answer, isCorrect, question, selectedAnswer }: Result) => void
   localStorageSave: () => void
+  pastResult: OldResult
   question: Question
   questionIndex: number
   results: Result[]
-  oldResults: string[]
+  oldResults: OldResult[]
   totalQuestions: number
 }
 
@@ -44,12 +53,34 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
   const [questions, setQuestions] = useState([])
   const [questionIndex, setQuestionIndex] = useState(0)
   const [oldResults, setOldResults] = useState([])
+  const [pastResult, setPastResult] = useState<OldResult>()
   const [results, setResults] = useState([])
   const totalQuestions = questions.length
 
   useEffect(() => {
     api.get(`api.php?amount=${ amount }`).then(response => setQuestions(response.data.results))
   }, [amount])
+
+  function addOldResults(results: Result[]) {
+    if(results.length === 0) {
+      getOldResults()
+      return
+    } else {
+      setOldResults([
+        ...oldResults,
+        { title: format(
+          new Date(),
+          "'Result of ' PP' at 'pp", {
+            locale: enUS
+          }
+        ), results }
+      ])
+    }
+  }
+
+  function changePastResult(oldResult: OldResult) {
+    setPastResult(oldResult)
+  }
 
   function clearStates() {
     setAmount(0)
@@ -95,20 +126,7 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
     }
   }
 
-  function addOldResults(results: Result[]) {
-    if(results.length === 0) {
-      getOldResults()
-      return
-    } else {
-      setOldResults([
-        ...oldResults,
-        { date: new Date(), results }
-      ])
-    }
-  }
-
   function localStorageSave() {
-    console.log(oldResults)
     localStorage.setItem('old_results', JSON.stringify(oldResults))
   }
   
@@ -127,11 +145,13 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
     <QuestionsContext.Provider value={ {
       addOldResults,
       amount,
+      changePastResult,
       clearStates,
       getOldResults,
       handleIndexSubmit,
       handleQuizSubmit,
       localStorageSave,
+      pastResult,
       question,
       questionIndex,
       results,
