@@ -7,7 +7,7 @@ import { useContext } from "react"
 import { QuestionsContext } from "../contexts/QuestionsContext"
 import { renderHTML } from "../utils/renderHTML"
 
-export default function pastResult() {
+export default function PastResult() {
   const { pastResult } = useContext(QuestionsContext)
   const totalHits = pastResult?.results.reduce((sum, result) => {
     if (result.isCorrect) return sum + 1

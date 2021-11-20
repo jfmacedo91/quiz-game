@@ -53,7 +53,7 @@ export function QuestionsProvider({ children }: QuestionsContextProps) {
   const [questions, setQuestions] = useState([])
   const [questionIndex, setQuestionIndex] = useState(0)
   const [oldResults, setOldResults] = useState([])
-  const [pastResult, setPastResult] = useState<OldResult>()
+  const [pastResult, setPastResult] = useState({ title: "", results: [] })
   const [results, setResults] = useState([])
   const totalQuestions = questions.length
 
